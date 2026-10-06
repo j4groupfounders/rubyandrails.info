@@ -16,13 +16,13 @@ gem "stimulus-rails"
 gem "turbo-rails"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "view_component"
-gem 'acts-as-taggable-on', '~> 9.0'
+gem 'acts-as-taggable-on', '~> 11.0'
 gem 'devise'
 gem 'friendly_id', '~> 5.4.0'
 gem 'meta-tags'
 gem 'pagy'
 gem 'rack-canonical-host'
-gem 'rails', '~> 7.0', '>= 7.0.4.2'
+gem 'rails', '~> 7.2.0'
 gem 'sd_notify', '~> 0.1.1'
 gem 'sitemap_generator'
 gem 'pundit'

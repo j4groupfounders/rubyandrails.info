@@ -1,0 +1,23 @@
+name: J4 relock
+# J4 fork-only helper: regenerate Gemfile.lock for the upgrade (lock resolution only, no app code runs).
+on:
+  workflow_dispatch:
+    inputs:
+      gems:
+        description: gems to update
+        required: true
+permissions:
+  contents: write
+jobs:
+  relock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+      - run: bundle lock --update ${{ inputs.gems }}
+      - run: grep -E "^    (rails|activerecord|devise|avo|ransack|acts-as-taggable-on|view_component|lookbook|turbo-rails) \(" Gemfile.lock
+      - run: |
+          git config user.name "J4 Westin"; git config user.email "j4groupfounders@users.noreply.github.com"
+          git commit -am "Relock Gemfile.lock for Rails 7.2 (bundle lock --update ${{ inputs.gems }})" && git push
