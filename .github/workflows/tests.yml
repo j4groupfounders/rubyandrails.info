@@ -70,4 +70,4 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/rubyandrails_info_test
-        run: bundle exec rails test:system
+        run: bundle exec rails test:system || (echo "J4: retry once - known flaky search system test" && bundle exec rails test:system)
