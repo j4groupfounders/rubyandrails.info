@@ -1,0 +1,22 @@
+name: J4 relock
+# J4 fork-only helper: when Gemfile changes on an upgrade branch, re-resolve Gemfile.lock
+# conservatively (bundle lock = only what the Gemfile change requires). No app code runs.
+on:
+  push:
+    branches: ['j4/upgrade-*']
+    paths: ['Gemfile']
+permissions:
+  contents: write
+jobs:
+  relock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+      - run: bundle lock
+      - run: grep -E "^    (rails|devise|avo|ransack|acts-as-taggable-on|view_component|lookbook|turbo-rails|phlex-rails) \(" Gemfile.lock
+      - run: |
+          git config user.name "J4 Westin"; git config user.email "j4groupfounders@users.noreply.github.com"
+          git commit -am "Relock Gemfile.lock (bundle lock, conservative)" && git push || echo "lock unchanged"

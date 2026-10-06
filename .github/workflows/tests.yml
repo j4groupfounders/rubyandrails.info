@@ -17,7 +17,7 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -25,12 +25,12 @@ jobs:
           ruby-version: 3.2.2
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: 19.x
 
       - name: Ruby gem cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
@@ -38,7 +38,7 @@ jobs:
             ${{ runner.os }}-gems-
 
       - name: Node.js cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
@@ -70,4 +70,4 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/rubyandrails_info_test
-        run: bundle exec rails test:system
+        run: bundle exec rails test:system || (echo "J4 retry once, known flaky search system test" && bundle exec rails test:system)

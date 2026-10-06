@@ -51,9 +51,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # The path used after sign up.
-  # def after_sign_up_path_for(resource)
-  #   super(resource)
-  # end
+  # J4 upgrade note: under Devise 4.8 + Turbo, sign-up requests (turbo_stream format) were not
+  # "navigational", so users landed on their profile page. Devise 4.9 fixes that and would send
+  # them to root_path instead. Preserve the previously observed behaviour; owner may choose otherwise.
+  def after_sign_up_path_for(resource)
+    user_path(resource)
+  end
 
   # The path used after sign up for inactive accounts.
   # def after_inactive_sign_up_path_for(resource)
